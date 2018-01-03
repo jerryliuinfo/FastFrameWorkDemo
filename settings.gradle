@@ -1,1 +1,1 @@
-include ':app', ':fastframework'
+include ':app', ':fastFramework'

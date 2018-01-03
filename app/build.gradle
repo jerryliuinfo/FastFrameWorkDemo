@@ -27,5 +27,5 @@ dependencies {
     })
     compile thirddependencies.appcompatV7
     testCompile 'junit:junit:4.12'
-    compile project(':fastframework')
+    compile project(':fastFramework')
 }

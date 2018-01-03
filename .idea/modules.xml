@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FastFrameWorkDemo.iml" filepath="$PROJECT_DIR$/FastFrameWorkDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fastframework/fastframework.iml" filepath="$PROJECT_DIR$/fastframework/fastframework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fastFramework/fastFramework.iml" filepath="$PROJECT_DIR$/fastFramework/fastFramework.iml" />
     </modules>
   </component>
 </project>
