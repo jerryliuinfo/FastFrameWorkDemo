@@ -1,0 +1,81 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: rootProject.file('version_config.gradle')
+
+//apply from: rootProject.file('module.gradle')
+
+buildscript {
+    repositories {
+        jcenter()   //JCenter仓库
+       /* maven {
+
+            //url 'https://dl.bintray.com/jerryliuinfo/maven/'
+
+        }*/
+        flatDir {
+            dirs rootDir.getAbsolutePath()+'/libs'
+        }
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+
+
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // 添加这行
+
+        classpath 'com.antfortune.freeline:gradle:0.8.7'
+
+        //classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.1.9'
+
+
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+
+    }
+
+
+}
+allprojects{
+    repositories {
+        jcenter()  //JCenter仓库
+        mavenCentral()//mvenCenter仓库
+        maven { url "https://jitpack.io" }   // jitpack仓库
+        flatDir {
+            dirs rootDir.getAbsolutePath()+'/libs'
+        }
+    }
+}
+
+
+
+
+String SDK_DIR = System.getenv("ANDROID_SDK_HOME")
+if (SDK_DIR == null) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(project.rootProject.file("local.properties")))
+    SDK_DIR = props.get('sdk.dir');
+}
+
+
+
+/**
+ *获取apk
+ */
+task archiveOutApks(type: Copy){
+    from('app/build/outputs/apk')
+    exclude '*unaligned*'
+    into('./outapk/archives')
+}
+
+
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+    delete 'outapk/archives'
+}
+
+
+
+
+
+
