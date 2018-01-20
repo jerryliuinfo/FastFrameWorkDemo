@@ -10,7 +10,7 @@ import android.view.View;
  * Created by Administrator on 2017/3/22 0022.
  */
 
-public class ImageLoaderManager implements IImageLoaderstrategy,IImageLoaderInit,IImagePahtFromCache {
+public class ImageLoaderManager implements IImageLoaderstrategy,IImagePahtFromCache {
     private static final ImageLoaderManager INSTANCE = new ImageLoaderManager();
 
     private  IImageLoaderstrategy loaderstrategy;
@@ -77,10 +77,19 @@ public class ImageLoaderManager implements IImageLoaderstrategy,IImageLoaderInit
 
     @Override
     public void init(Context context) {
-        if (loaderstrategy != null && loaderstrategy instanceof IImageLoaderInit){
-            IImageLoaderInit imageLoaderInit = (IImageLoaderInit) loaderstrategy;
-            imageLoaderInit.init(context);
+        if (loaderstrategy != null){
+            loaderstrategy.init(context);
         }
+    }
+
+    @Override
+    public void pause(Context context) {
+
+    }
+
+    @Override
+    public void resume(Context context) {
+
     }
 
     @Override

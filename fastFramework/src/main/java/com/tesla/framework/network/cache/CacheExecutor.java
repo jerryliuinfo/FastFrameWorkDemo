@@ -28,7 +28,7 @@ public class CacheExecutor {
         }
     };
 
-    static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(10);
+    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(10);
 
     public static final Executor CACHE_THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS,
             sPoolWorkQueue, sThreadFactory);

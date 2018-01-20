@@ -75,12 +75,14 @@ public class CacheInterceptor implements Interceptor {
             long maxAge = DEFAULT_ONLINE_TIMEOUT;
             return originalResponse.newBuilder()
                     .header("Cache-Control", "public, max-age=" + maxAge)
+                    //设置缓存时间为，并移除了pragma消息头，移除它的原因是因为pragma也是控制缓存的一个消息头属性
                     .removeHeader("Pragma")
                     .build();
         } else {
             long maxStale = DEFAULT_OFFLINE_TIMEOUT;
             return originalResponse.newBuilder()
                     .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                    //设置缓存时间为，并移除了pragma消息头，移除它的原因是因为pragma也是控制缓存的一个消息头属性
                     .removeHeader("Pragma")
                     .build();
         }

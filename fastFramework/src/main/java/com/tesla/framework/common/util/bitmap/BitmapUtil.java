@@ -76,23 +76,66 @@ public class BitmapUtil {
 		return result;
 	}
 
-	public static Bitmap zoomBitmap(Bitmap source, int width) {
-		Matrix matrix = new Matrix();
-		float scale = width * 1.0f / source.getWidth();
-		matrix.setScale(scale, scale);
-		Bitmap result = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-		try {
-			NLog.d(
-					TAG,
-					String.format("zoom bitmap, source(%d,%d) result(%d,%d)", source.getWidth(), source.getHeight(), result.getWidth(),
-							result.getHeight()));
-		} catch (Exception e) {
-		}
-//		source.recycle();
-		return result;
+
+	/**
+	 * 对图片进行高斯模糊
+	 * @param context
+	 * @param bpin
+	 * @param prop   缩放比例
+	 * @param radius
+	 * @return
+	 */
+	public static Bitmap fastBlur(Context context, Bitmap bpin, float prop, int radius) {
+		Bitmap bp = zoomBitmap(bpin, prop);
+		return BitmapBlurUtil.fastBlur(context, bp, radius);
 	}
 
-    public static Bitmap decodeRegion(byte[] bytes, int width, int height) {
+
+
+	public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+														 int reqWidth, int reqHeight) {
+		// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(res, resId, options);
+
+		// 调用上面定义的方法计算inSampleSize值
+		//options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		// 使用获取到的inSampleSize值再次解析图片
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeResource(res, resId, options);
+
+	}
+
+	public static Bitmap zoomBitmap(Bitmap source, int width) {
+		float scale = width * 1.0f / source.getWidth();
+		return zoomBitmap(source,scale);
+	}
+
+	/**
+	 * 按比例缩放图片
+	 *
+	 * @param source
+	 * @param scale
+	 * @return
+	 */
+	public static Bitmap zoomBitmap(Bitmap source, float scale) {
+		int bitmapWidth = source.getWidth();
+		int bitmapHeight = source.getHeight();
+
+		Matrix matrix = new Matrix();
+		matrix.postScale(scale, scale);
+		Bitmap newBitmap = Bitmap.createBitmap(source, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
+		return newBitmap;
+	}
+
+
+
+
+
+
+
+	public static Bitmap decodeRegion(byte[] bytes, int width, int height) {
         try {
             BitmapRegionDecoder bitmapDecoder = BitmapRegionDecoder.newInstance(bytes, 0, bytes.length, true);
             Rect rect = new Rect(0, 0, width, height);

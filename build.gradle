@@ -1,6 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: rootProject.file('version_config.gradle')
-
 //apply from: rootProject.file('module.gradle')
 
 buildscript {
@@ -20,15 +19,22 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.3'
 
 
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // 添加这行
+       classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // 添加这行
 
-        classpath 'com.antfortune.freeline:gradle:0.8.7'
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+//        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+
+        //classpath 'com.novoda:bintray-release:0.3.4'
+
+        /* classpath 'com.antfortune.freeline:gradle:0.8.7'*/
 
         //classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.1.9'
 
 
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+
+
+
+
 
     }
 
@@ -42,6 +48,11 @@ allprojects{
         flatDir {
             dirs rootDir.getAbsolutePath()+'/libs'
         }
+    }
+
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
     }
 }
 
@@ -79,3 +90,4 @@ task clean(type: Delete) {
 
 
 
+//tasks.getByPath(":fastFramework:mavenAndroidJavadocs").enabled = false
