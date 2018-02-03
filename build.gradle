@@ -5,11 +5,9 @@ apply from: rootProject.file('version_config.gradle')
 buildscript {
     repositories {
         jcenter()   //JCenter仓库
-       /* maven {
-
-            //url 'https://dl.bintray.com/jerryliuinfo/maven/'
-
-        }*/
+        maven {
+            url 'https://dl.bintray.com/xiangxiangliu/maven'
+        }
         flatDir {
             dirs rootDir.getAbsolutePath()+'/libs'
         }
@@ -84,10 +82,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
     delete 'outapk/archives'
 }
-
-
-
-
-
-
-//tasks.getByPath(":fastFramework:mavenAndroidJavadocs").enabled = false

@@ -18,9 +18,9 @@ package com.tesla.framework.common.util;
 
 import android.util.Log;
 
-import com.tesla.framework.common.util.io.CloseableUtils;
-
+import java.io.Closeable;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  *
@@ -52,8 +52,25 @@ public final class SysUtils {
         } catch (Throwable e) {
                 Log.e(TAG, e.getMessage(), e);
         } finally {
-            CloseableUtils.closeQuietly(in);
+            closeQuietly(in);
         }
         return null;
+    }
+
+
+
+    /**
+     * 大部分Close关闭流，以及实现Closeable的功能可使用此方法
+     *
+     * @param c Closeable对象，包括Stream等
+     */
+    public static void closeQuietly(Closeable c) {
+        try {
+            if (c != null) {
+                c.close();
+            }
+        } catch (final IOException ioe) {
+            // ignore
+        }
     }
 }
