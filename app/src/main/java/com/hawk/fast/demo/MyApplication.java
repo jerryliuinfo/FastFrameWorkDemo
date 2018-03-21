@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Process;
 import android.util.Log;
 
+import com.tesla.framework.common.util.log.Logger;
+import com.tesla.framework.common.util.log.NLog;
+
 /**
  * Created by 01370340 on 2018/1/25.
  */
@@ -23,6 +26,7 @@ public class MyApplication extends Application {
 
         Log.d(TAG, "MyApplication onCreate process name = "+ Process.myPid() +", process name = "+getCurProcessName(this));
 
+        NLog.setDebug(true, Logger.DEBUG);
     }
 
 

@@ -1,12 +1,19 @@
 package com.tesla.framework.common.util;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
+
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 /**
  * Created by jerryliu on 2017/6/10.
@@ -26,14 +33,7 @@ public class DeviceUtil {
         int sdk = Build.VERSION.SDK_INT;
         return sdk;
     }
-    /**
-     * 获取手机机型信息
-     * 如果pixi android5手机获取model的api为反射ro.build.product方式
-     * @return
-     */
-    public static String getDeviceModel() {
-        return android.os.Build.MODEL;
-    }
+
 
     public static String getIMSI(Context context) {
         String result = "";
@@ -118,10 +118,9 @@ public class DeviceUtil {
         return transformIp(wifi.getConnectionInfo().getIpAddress());
     }
 
-
-
-
-
+    public static String getOS() {
+        return "Android";
+    }
 
     /**
      * 获得手机品牌
@@ -132,11 +131,28 @@ public class DeviceUtil {
     }
 
     /**
+     * 获取手机机型信息
+     *
+     * @return
+     */
+    public static String getModel() {
+        return Build.MODEL == null ? "UNKNOWN" : Build.MODEL;
+    }
+
+    public static String getVersion() {
+        return Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE;
+    }
+
+    /**
      * 获得系统版本名称
      * @return
      */
     public static String getOsVersionName(){
         return Build.VERSION.RELEASE;
+    }
+
+    public static String getManufacturer() {
+        return Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER;
     }
 
     /**
@@ -146,6 +162,52 @@ public class DeviceUtil {
     public static String getAndroidId(Context context){
         return Settings.System.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
+
+
+    /**
+     * 获取手机唯一序列号
+     *
+     * @param context
+     * @return
+     */
+    public static String getDeviceId(Context context) {
+        String id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        //在某些机型上总是返回9774d56d682e549c这个值
+        if ("9774d56d682e549c".equals(id)) {
+            id = makeDeviceInfo();
+        }
+        try {
+            return UUID.nameUUIDFromBytes(id.getBytes("utf8")).toString();
+        } catch (UnsupportedEncodingException e) {
+        }
+        return id;
+    }
+
+    public static String makeDeviceInfo() {
+        StringBuilder builder = new StringBuilder();
+        builder .append(Build.BOARD).append("#")
+                .append(Build.BRAND).append("#")
+                .append(Build.DEVICE).append("#")
+                .append(Build.DISPLAY).append("#")
+                .append(Build.HOST).append("#")
+                .append(Build.ID).append("#")
+                .append(Build.MANUFACTURER).append("#")
+                .append(Build.MODEL).append("#")
+                .append(Build.PRODUCT).append("#")
+                .append(Build.TAGS).append("#")
+                .append(Build.TYPE).append("#")
+                .append(Build.USER).append("#");
+        return builder.toString();
+    }
+
+
+
+
+
+
+
+
+
 
 
 }

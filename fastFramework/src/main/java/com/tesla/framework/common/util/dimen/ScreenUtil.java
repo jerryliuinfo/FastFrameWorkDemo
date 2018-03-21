@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -101,6 +102,54 @@ public class ScreenUtil {
         return density;
     }
 
+
+    /**
+     * 获取屏幕密度
+     *
+     * @param context
+     * @return
+     */
+    public static String getScreenDensityStr(final Context context) {
+        String densityStr;
+        final int density = context.getResources().getDisplayMetrics().densityDpi;
+        switch (density) {
+            case DisplayMetrics.DENSITY_LOW:
+                densityStr = "LDPI";
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                densityStr = "MDPI";
+                break;
+            case DisplayMetrics.DENSITY_TV:
+                densityStr = "TVDPI";
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                densityStr = "HDPI";
+                break;
+            //todo uncomment in android sdk 25
+            case DisplayMetrics.DENSITY_260:
+            case DisplayMetrics.DENSITY_280:
+            case DisplayMetrics.DENSITY_300:
+            case DisplayMetrics.DENSITY_XHIGH:
+                densityStr = "XHDPI";
+                break;
+            //todo uncomment in android sdk 25
+            case DisplayMetrics.DENSITY_340:
+            case DisplayMetrics.DENSITY_360:
+            case DisplayMetrics.DENSITY_400:
+            case DisplayMetrics.DENSITY_420:
+            case DisplayMetrics.DENSITY_XXHIGH:
+                densityStr = "XXHDPI";
+                break;
+            case DisplayMetrics.DENSITY_560:
+            case DisplayMetrics.DENSITY_XXXHIGH:
+                densityStr = "XXXHDPI";
+                break;
+            default:
+                densityStr = "other";
+                break;
+        }
+        return densityStr;
+    }
 
 
 
@@ -221,6 +270,49 @@ public class ScreenUtil {
         }
         return result;
     }
+
+
+
+    /**
+     * 获取屏幕的物理尺寸(包括状态栏和导航栏)
+     *
+     * @param context
+     * @return
+     */
+    public static Point getScreenRealSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            Point point = new Point();
+            display.getRealSize(point);
+            return point;
+        } else if (Build.VERSION.SDK_INT >= 14) {
+            int width = 0;
+            int height = 0;
+            try {
+                width = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+                height = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            } catch (Exception e) {
+            }
+            if (width != 0 && height != 0) {
+                return new Point(width, height);
+            }
+
+        }
+
+        Point point = new Point();
+        display.getSize(point);
+        return point;
+    }
+
+
+    public static String getResolution(final Context context) {
+        Point point = getScreenRealSize(context);
+        return point.x + "x" + point.y;
+    }
+
+
 
 
 

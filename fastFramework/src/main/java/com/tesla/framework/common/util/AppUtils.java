@@ -45,4 +45,11 @@ public class AppUtils {
             sHandler.removeCallbacks(r);
         }
     }
+
+
+
+
+
+
+
 }
