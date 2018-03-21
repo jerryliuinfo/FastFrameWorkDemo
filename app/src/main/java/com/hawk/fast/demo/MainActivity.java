@@ -2,9 +2,16 @@ package com.hawk.fast.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
-public class MainActivity extends Activity {
+import com.tesla.framework.common.util.handler.HandlerUtil;
+import com.tesla.framework.common.util.log.NLog;
+
+public class MainActivity extends Activity implements HandlerUtil.MessageReceiveListener {
+    public static final String TAG = MainActivity.class.getSimpleName();
+    private Handler mHander = new HandlerUtil.MyHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +24,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.btn_take_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mHander.sendEmptyMessage(100);
             }
         });
 
@@ -49,4 +56,13 @@ public class MainActivity extends Activity {
     }
 
 
+    @Override
+    public boolean isActivityDestroyed() {
+        return isDestroyed();
+    }
+
+    @Override
+    public void handleMessage(Message message) {
+        NLog.d(TAG, "handleMessage what = %s", message.what);
+    }
 }
