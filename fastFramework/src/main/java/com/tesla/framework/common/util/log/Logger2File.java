@@ -74,6 +74,7 @@ public class Logger2File {
         FileWriter fileWriter;
         String fileName;
         DateFormat formatter;
+        LinkedBlockingQueue<Log> logsQueue;
 
         public LoggerThread(Context context, String fileName) {
             String filePath = context.getExternalFilesDir("logs").getAbsolutePath() + File.separator;
@@ -95,7 +96,7 @@ public class Logger2File {
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         }
 
-        LinkedBlockingQueue<Log> logsQueue;
+
 
         void addLog(Log log) {
             if (fileWriter != null && logsQueue != null) {

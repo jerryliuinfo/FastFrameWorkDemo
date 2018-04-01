@@ -111,7 +111,7 @@ public class NetworkHelper {
 	
 	public void addNetworkInductor(NetworkInductor inductor)
 	{
-		final List<WeakReference<NetworkInductor>> list = new ArrayList<WeakReference<NetworkInductor>>(mInductors);
+		final List<WeakReference<NetworkInductor>> list = new ArrayList<>(mInductors);
 		for (int i = 0; i < list.size(); i++) {
 			WeakReference<NetworkInductor> inductorRef = list.get(i);
 			NetworkInductor ind = inductorRef.get();
@@ -141,10 +141,10 @@ public class NetworkHelper {
 	}
 	
 	protected void onNetworkChanged() {
-		if (mInductors.size() == 0)
+		if (mInductors == null || mInductors.size() == 0)
 			return;
 		
-		final List<WeakReference<NetworkInductor>> list = new ArrayList<WeakReference<NetworkInductor>>(mInductors);		
+		final List<WeakReference<NetworkInductor>> list = new ArrayList<>(mInductors);
 		for (int i = 0; i < list.size(); i++) {
 			WeakReference<NetworkInductor> inductorRef = list.get(i);
 			NetworkInductor inductor = inductorRef.get();

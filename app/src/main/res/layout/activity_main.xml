@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.hawk.fast.demo.MainActivity">
 
     <Button
@@ -14,4 +15,32 @@
         android:text="Take Photo"
        />
 
+
+    <Button
+        android:id="@+id/btn_single_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="单次闹钟"
+        />
+
+    <Button
+        android:id="@+id/btn_repeat_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重复闹钟"
+        />
+
+    <Button
+        android:id="@+id/btn_service_single_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="单次服务闹钟"
+        />
+
+    <Button
+        android:id="@+id/btn_service_repeat_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重复服务闹钟"
+        />
 </LinearLayout>

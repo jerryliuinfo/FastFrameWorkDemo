@@ -19,8 +19,11 @@ package com.tesla.framework.common.util;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -33,6 +36,19 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ThreadUtils {
 
     private static Handler sHandler = new Handler(Looper.getMainLooper());
+
+
+
+
+
+    private static final int CORE_POOL_SIZE = 5;
+    private static final int MAXIMUM_POOL_SIZE = 10;
+    private static final long KEEP_ALIVE_TIME = 10;
+    private static final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<>();
+
+    private static ThreadPoolExecutor sExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE,MAXIMUM_POOL_SIZE,KEEP_ALIVE_TIME,TimeUnit.SECONDS,workQueue);
+
+
 
     /**
      * 确保一定在主线程中使用
@@ -90,5 +106,13 @@ public class ThreadUtils {
 
         // 没有问题？则直接返回结果
         return result.get();
+    }
+
+
+
+
+
+    public static ThreadPoolExecutor getThreadPoolExecutor(){
+        return sExecutor;
     }
 }

@@ -1,17 +1,23 @@
 package com.hawk.fast.demo;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
+import com.tesla.framework.common.util.alarm.AlarmUtil;
 import com.tesla.framework.common.util.handler.HandlerUtil;
 import com.tesla.framework.common.util.log.NLog;
 
 public class MainActivity extends Activity implements HandlerUtil.MessageReceiveListener {
     public static final String TAG = MainActivity.class.getSimpleName();
     private Handler mHander = new HandlerUtil.MyHandler(this);
+
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +35,61 @@ public class MainActivity extends Activity implements HandlerUtil.MessageReceive
         });
 
 
+        findViewById(R.id.btn_single_alarm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long triggerAtMilles = System.currentTimeMillis() + 10 * 1000;
+                long intervalMillis = 0;
+                AlarmUtil.setAlarmNew(MainActivity.this,triggerAtMilles,intervalMillis, getBroadCastPendingIntent(200,intervalMillis));
+            }
+        });
+        findViewById(R.id.btn_repeat_alarm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long triggerAtMilles = System.currentTimeMillis() + 10 * 1000;
+                long intervalMillis = 10*1000;
 
+                AlarmUtil.setAlarmNew(MainActivity.this,triggerAtMilles,intervalMillis, getBroadCastPendingIntent(100,intervalMillis));
+            }
+        });
+        findViewById(R.id.btn_service_single_alarm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long triggerAtMilles = System.currentTimeMillis() + 10 * 1000;
+                long intervalMillis = 0;
+                AlarmUtil.setAlarmNew(MainActivity.this,triggerAtMilles,intervalMillis, getServicePendingIntent(300,intervalMillis));
+            }
+        });
+        findViewById(R.id.btn_service_repeat_alarm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long triggerAtMilles = System.currentTimeMillis() + 10 * 1000;
+                long intervalMillis = 10*1000;
+
+                AlarmUtil.setAlarmNew(MainActivity.this,triggerAtMilles,intervalMillis, getServicePendingIntent(400,intervalMillis));
+            }
+        });
     }
+
+    public PendingIntent getBroadCastPendingIntent(int id, long intervalMillis){
+        Intent intent = new Intent(LoongggAlarmReceiver.ALARM_ACTION);
+        intent.putExtra("intervalMillis", intervalMillis);
+        intent.putExtra("id", id);
+        PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, id, intent, PendingIntent
+                .FLAG_CANCEL_CURRENT);
+        return sender;
+    }
+
+
+    public PendingIntent getServicePendingIntent(int id, long intervalMillis){
+        Intent intent = new Intent(AlarmService.ACTION_ALARM);
+        intent.putExtra("intervalMillis", intervalMillis);
+        intent.putExtra("id", id);
+        PendingIntent sender = PendingIntent.getService(MainActivity.this, id, intent, PendingIntent
+                .FLAG_CANCEL_CURRENT);
+        return sender;
+    }
+
 
 
     private void requestPermi(){
@@ -64,5 +123,10 @@ public class MainActivity extends Activity implements HandlerUtil.MessageReceive
     @Override
     public void handleMessage(Message message) {
         NLog.d(TAG, "handleMessage what = %s", message.what);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
